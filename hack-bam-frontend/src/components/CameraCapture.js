@@ -87,6 +87,7 @@ export default function CameraCapture({ onAnalysisComplete }) {
           ref={fileInputRef}
           type="file"
           accept="image/*"
+          capture="environment"
           onChange={handleFileUpload}
           className="hidden"
         />
