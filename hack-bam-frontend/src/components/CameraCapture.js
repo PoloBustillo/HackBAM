@@ -7,6 +7,7 @@ export default function CameraCapture({ onAnalysisComplete }) {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
   const fileInputRef = useRef(null);
+  const cameraInputRef = useRef(null);
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
@@ -65,29 +66,50 @@ export default function CameraCapture({ onAnalysisComplete }) {
           )}
         </div>
 
-        <div className="flex space-x-4">
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+          {/* Botón para tomar foto con cámara (solo mobile) */}
           <button
-            onClick={() => fileInputRef.current?.click()}
+            type="button"
+            onClick={() => cameraInputRef.current?.click()}
             disabled={isAnalyzing}
             className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center"
           >
+            <Camera className="w-4 h-4 mr-2" />
+            Tomar Foto
+          </button>
+          {/* Botón para subir desde biblioteca */}
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isAnalyzing}
+            className="flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 disabled:opacity-50 flex items-center justify-center"
+          >
             <Upload className="w-4 h-4 mr-2" />
-            Subir Imagen
+            Subir desde galería
           </button>
 
           {isAnalyzing && (
-            <div className="flex items-center space-x-2 text-blue-600">
+            <div className="flex items-center space-x-2 text-blue-600 mt-2 sm:mt-0">
               <Loader className="w-4 h-4 animate-spin" />
               <span>Analizando...</span>
             </div>
           )}
         </div>
 
+        {/* Input para tomar foto con cámara (mobile) */}
+        <input
+          ref={cameraInputRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          onChange={handleFileUpload}
+          className="hidden"
+        />
+        {/* Input para subir desde biblioteca */}
         <input
           ref={fileInputRef}
           type="file"
           accept="image/*"
-          capture="environment"
           onChange={handleFileUpload}
           className="hidden"
         />
